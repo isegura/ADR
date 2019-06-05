@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SQL XML created by WWW SQL Designer, http://code.google.com/p/wwwsqldesigner/ -->
+<!-- Active URL: http://ondras.zarovi.cz/sql/demo/ -->
+<sql>
+<datatypes db="mysql">
+	<group label="Numeric" color="rgb(238,238,170)">
+	 	<type label="TINYINT" length="0" sql="TINYINT" quote=""/>
+	 	<type label="SMALLINT" length="0" sql="SMALLINT" quote=""/>
+	 	<type label="MEDIUMINT" length="0" sql="MEDIUMINT" quote=""/>
+	 	<type label="INT" length="0" sql="INT" quote=""/>
+		<type label="Integer" length="0" sql="INTEGER" quote=""/>
+		<type label="BIGINT" length="0" sql="BIGINT" quote=""/>
+		<type label="Decimal" length="1" sql="DECIMAL" re="DEC" quote=""/>
+		<type label="Single precision" length="0" sql="FLOAT" quote=""/>
+		<type label="Double precision" length="0" sql="DOUBLE" re="DOUBLE" quote=""/>
+	</group>
+
+	<group label="Character" color="rgb(255,200,200)">
+		<type label="Char" length="1" sql="CHAR" quote="'"/>
+		<type label="Varchar" length="1" sql="VARCHAR" quote="'"/>
+		<type label="Text" length="0" sql="MEDIUMTEXT" re="TEXT" quote="'"/>
+		<type label="Binary" length="1" sql="BINARY" quote="'"/>
+		<type label="Varbinary" length="1" sql="VARBINARY" quote="'"/>
+		<type label="BLOB" length="0" sql="BLOB" re="BLOB" quote="'"/>
+	</group>
+
+	<group label="Date &amp; Time" color="rgb(200,255,200)">
+		<type label="Date" length="0" sql="DATE" quote="'"/>
+		<type label="Time" length="0" sql="TIME" quote="'"/>
+		<type label="Datetime" length="0" sql="DATETIME" quote="'"/>
+		<type label="Year" length="0" sql="YEAR" quote=""/>
+		<type label="Timestamp" length="0" sql="TIMESTAMP" quote="'"/>
+	</group>
+	
+	<group label="Miscellaneous" color="rgb(200,200,255)">
+		<type label="ENUM" length="1" sql="ENUM" quote=""/>
+		<type label="SET" length="1" sql="SET" quote=""/>
+		<type label="Bit" length="0" sql="bit" quote=""/>
+	</group>
+</datatypes><table x="520" y="56" name="Drug">
+<row name="id" null="0" autoincrement="1">
+<datatype>TINYINT</datatype>
+</row>
+<row name="name" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="reviewed" null="0" autoincrement="0">
+<datatype>BLOB</datatype>
+<comment>El valor será true si el campo ya ha sido revisado y sabemos que en efecto es un principio activo representante de un synste; por el contrario, será false, si todavía no hemos podido comprobar que tipo de fármaco es y cabe la posibilidad que después de su revisión pueda ser asimilado dentro de un concepto como un nuevo término en un synset en la tabla DrugSynset</comment>
+</row>
+<key type="UNIQUE" name="">
+<part>name</part>
+</key>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>ESta tabla solo contiene principios activos (generic drugs)</comment>
+</table>
+<table x="209" y="208" name="DrugEffect">
+<row name="drugId" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<relation table="Drug" row="id" />
+</row>
+<row name="effectId" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<relation table="Effect" row="id" />
+</row>
+<row name="effectTypeId" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<relation table="EffectTypes" row="id" />
+</row>
+<key type="PRIMARY" name="">
+<part>drugId</part>
+<part>effectId</part>
+<part>effectTypeId</part>
+</key>
+<comment>contiene las relaciones</comment>
+</table>
+<table x="447" y="527" name="Effect">
+<row name="id" null="0" autoincrement="1">
+<datatype>TINYINT</datatype>
+</row>
+<row name="effectName" null="0" autoincrement="0">
+<datatype>VARCHAR(200)</datatype>
+</row>
+<row name="reviewed" null="0" autoincrement="0">
+<datatype>BLOB</datatype>
+<comment>Su valor será false, si su valor aún no ha sido revisado y es posible que pueda ser asimilado como un sinónimo dentro de algún synset en la tabla EffectSynset</comment>
+</row>
+<key type="UNIQUE" name="">
+<part>effectName</part>
+</key>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="510" y="303" name="DrugSynset">
+<row name="id" null="0" autoincrement="1">
+<datatype>TINYINT</datatype>
+</row>
+<row name="drugId" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<relation table="Drug" row="id" />
+</row>
+<row name="synName" null="0" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+</row>
+<row name="isBrand" null="0" autoincrement="0">
+<datatype>BLOB</datatype>
+</row>
+<key type="UNIQUE" name="">
+<part>drugId</part>
+<part>synName</part>
+</key>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>Esta tabla contiene todos los posibles sinónimos. Puede haber sinónimos que sean brand y otros genéricos</comment>
+</table>
+<table x="147" y="433" name="EffectTypes">
+<row name="id" null="0" autoincrement="1">
+<datatype>TINYINT</datatype>
+</row>
+<row name="effectTypeName" null="0" autoincrement="0">
+<datatype>VARCHAR(30)</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<key type="UNIQUE" name="">
+<part>effectTypeName</part>
+</key>
+<comment>puede ser indication o side effect</comment>
+</table>
+<table x="632" y="537" name="EffectSynset">
+<row name="id" null="0" autoincrement="1">
+<datatype>TINYINT</datatype>
+</row>
+<row name="drugEffectId" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<relation table="Effect" row="id" />
+</row>
+<row name="drugEffectSynName" null="0" autoincrement="0">
+<datatype>VARCHAR(200)</datatype>
+</row>
+<key type="UNIQUE" name="">
+<part>drugEffectId</part>
+<part>drugEffectSynName</part>
+</key>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="722" y="36" name="has_ATC">
+<row name="idATC" null="0" autoincrement="0">
+<datatype>VARCHAR(6)</datatype>
+<relation table="ATCCodes" row="idATC" />
+</row>
+<row name="drugId" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<relation table="Drug" row="id" />
+</row>
+<key type="PRIMARY" name="">
+<part>idATC</part>
+<part>drugId</part>
+</key>
+<comment>contiene las relaciones entre fármaco y sus códigos atc; un fármaco puede tener varios códigos atc</comment>
+</table>
+<table x="904" y="37" name="ATCCodes">
+<row name="idATC" null="0" autoincrement="0">
+<datatype>VARCHAR(6)</datatype>
+</row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>idATC</part>
+</key>
+<comment>Contiene todos los Codigos ATC y sus descripciones</comment>
+</table>
+<table x="743" y="302" name="has_externalIDDrug">
+<row name="drugId" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<relation table="DrugSynset" row="id" />
+</row>
+<row name="idExternal" null="0" autoincrement="0">
+<datatype>VARCHAR(15)</datatype>
+</row>
+<row name="source" null="1" autoincrement="0">
+<datatype>VARCHAR(200)</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>drugId</part>
+<part>idExternal</part>
+</key>
+<comment>contiene los linking con otras bases de datos</comment>
+</table>
+<table x="845" y="540" name="has_externalIDEffect">
+<row name="effectId" null="0" autoincrement="0">
+<datatype>TINYINT</datatype>
+<relation table="EffectSynset" row="id" />
+</row>
+<row name="idExternal" null="0" autoincrement="0">
+<datatype>VARCHAR(15)</datatype>
+</row>
+<row name="source" null="1" autoincrement="0">
+<datatype>VARCHAR(200)</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>effectId</part>
+<part>idExternal</part>
+</key>
+</table>
+</sql>
